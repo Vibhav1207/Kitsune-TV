@@ -9,18 +9,13 @@ export const API_BASE_URL =
     : config.serverUrl;
 
 const fetchData = async (url) => {
+  console.log(API_BASE_URL);
   try {
-    const { data } = await axios.get(API_BASE_URL + url, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      timeout: 10000, // 10 second timeout
-    });
+    const { data } = await axios.get(API_BASE_URL + url);
+
     return data;
   } catch (error) {
-    console.error('API Error:', error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || error.message);
+    throw new Error(error);
   }
 };
 

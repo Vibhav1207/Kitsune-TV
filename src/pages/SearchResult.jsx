@@ -31,7 +31,7 @@ const SearchResult = () => {
     <div className="list-page pt-20">
       <Helmet>
         <title>search result of {keyword}</title>
-        <meta property="og:title" content="search - kitsunetv" />
+        <meta property="og:title" content="search - watanuki" />
       </Helmet>
       {pages && !isLoading ? (
         <InfiniteScroll

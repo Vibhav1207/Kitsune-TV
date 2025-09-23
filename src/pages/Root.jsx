@@ -1,5 +1,5 @@
 import { FaArrowCircleRight, FaSearch } from "react-icons/fa";
-import banner from "../assets/aizen.jpg";
+import banner from "../assets/homeBanner.png";
 import background from "../assets/background.jpg";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
@@ -30,11 +30,6 @@ const Root = () => {
             <div className="flex justify-center items-center">
               {/* <img className="h-8 md:h-10 w-auto" src={logo} alt="logo" /> */}
               <Logo />
-            </div>
-            <div className="flex justify-center items-center mt-3">
-              <h2 className="gradient-text select-none text-lg md:text-xl text-center">
-                Your Visiting to this site was part of my plan
-              </h2>
             </div>
             <div className="searchBox mt-5">
               <form
