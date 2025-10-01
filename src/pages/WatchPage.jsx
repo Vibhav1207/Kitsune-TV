@@ -16,7 +16,7 @@ const WatchPage = () => {
 
   const ep = searchParams.get("ep");
 
-  const { data, isError } = useApi(`/episodes/${id}`);
+  const { data, isError, error, isLoading } = useApi(`/episodes/${id}`);
   const episodes = data?.data;
 
   const updateParams = (newParam) => {
@@ -26,7 +26,6 @@ const WatchPage = () => {
       return newParams;
     });
   };
-  // Update document title
 
   // Auto-redirect to first episode if no `ep` param exists
   useEffect(() => {
@@ -37,10 +36,24 @@ const WatchPage = () => {
   }, [ep, episodes, setSearchParams]);
 
   if (isError) {
-    return <PageNotFound />;
+    console.error("Error fetching episodes:", error);
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-background text-white">
+        <h1 className="text-2xl mb-4 text-red-400">Error Loading Episodes</h1>
+        <p className="text-gray-300 text-center mb-4">
+          {error?.message || "Failed to load episode data. Please try again later."}
+        </p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="bg-primary text-black px-4 py-2 rounded"
+        >
+          Retry
+        </button>
+      </div>
+    );
   }
 
-  if (!episodes) {
+  if (isLoading || !episodes) {
     return <Loader className="h-screen" />;
   }
 
@@ -49,20 +62,37 @@ const WatchPage = () => {
     ep !== null &&
     episodes.find((e) => e.id.split("ep=").pop() === ep);
 
+  // If we can't find the current episode, default to the first one
+  const safeCurrentEp = currentEp || (episodes && episodes[0]);
+
+  if (!safeCurrentEp) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-background text-white">
+        <h1 className="text-2xl mb-4 text-red-400">Episode Not Found</h1>
+        <p className="text-gray-300 text-center mb-4">
+          The requested episode could not be found.
+        </p>
+        <Link to="/home" className="bg-primary text-black px-4 py-2 rounded">
+          Go to Home
+        </Link>
+      </div>
+    );
+  }
+
   const changeEpisode = (action) => {
     if (action === "next") {
-      const nextEp = episodes[currentEp.episodeNumber - 1 + 1];
+      const nextEp = episodes[safeCurrentEp.episodeNumber - 1 + 1];
       if (!nextEp) return;
       updateParams(nextEp.id.split("ep=").pop());
     } else {
-      const prevEp = episodes[currentEp.episodeNumber - 1 - 1];
+      const prevEp = episodes[safeCurrentEp.episodeNumber - 1 - 1];
       if (!prevEp) return;
       updateParams(prevEp.id.split("ep=").pop());
     }
   };
 
-  const hasNextEp = Boolean(episodes[currentEp.episodeNumber - 1 + 1]);
-  const hasPrevEp = Boolean(episodes[currentEp.episodeNumber - 1 - 1]);
+  const hasNextEp = Boolean(episodes[safeCurrentEp.episodeNumber - 1 + 1]);
+  const hasPrevEp = Boolean(episodes[safeCurrentEp.episodeNumber - 1 - 1]);
 
   return (
     /* WatchPage.js */
@@ -70,9 +100,9 @@ const WatchPage = () => {
       <Helmet>
         <title>
           Watch {id.split("-").slice(0, 2).join(" ")} Online, Free Anime
-          Streaming Online on Watanuki Anime Website
+          Streaming Online on KitsuneTV Anime Website
         </title>
-        <meta property="og:title" content="watch - watanuki" />
+        <meta property="og:title" content="watch - KitsuneTV" />
       </Helmet>
       <div className="flex flex-col gap-2">
         <div className="path flex mb-2 mx-2 items-center gap-2 text-base ">
@@ -86,13 +116,13 @@ const WatchPage = () => {
             </h4>
           </Link>
           <span className="h-1 w-1 rounded-full bg-primary"></span>
-          <h4 className="gray">{`episode ${currentEp.episodeNumber}`}</h4>
+          <h4 className="gray">{`episode ${safeCurrentEp.episodeNumber}`}</h4>
         </div>
         {ep && id && (
           <Player
             id={id}
             episodeId={`${id}?ep=${ep}`}
-            currentEp={currentEp}
+            currentEp={safeCurrentEp}
             changeEpisode={changeEpisode}
             hasNextEp={hasNextEp}
             hasPrevEp={hasPrevEp}
@@ -129,7 +159,7 @@ const WatchPage = () => {
             <Episodes
               key={episode.id}
               episode={episode}
-              currentEp={currentEp}
+              currentEp={safeCurrentEp}
               layout={layout}
             />
           ))}

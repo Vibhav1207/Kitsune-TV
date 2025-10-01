@@ -1,13 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 
 const colors = {
-  primary: "#ffdd95",
+  primary: "#8b5cf6",
   background: "#242428",
   lightbg: "#2f2f33",
   card: "#2f2f33",
   btnbg: "#3a3a3e",
   yellow: "#F9ED69",
-  purple: "#B1B2FF",
+  purple: "#8b5cf6",
   pink: "#F2BED1",
   lighttext: "#ccc",
 };

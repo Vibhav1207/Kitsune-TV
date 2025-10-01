@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   TbPlayerTrackPrevFilled,
   TbPlayerTrackNextFilled,
 } from "react-icons/tb";
+import VideoPlayer from "./VideoPlayer";
 
 const Player = ({
   episodeId,
@@ -20,22 +21,22 @@ const Player = ({
       setCategory(newType);
     }
   };
+  
   function changeServer(newServer) {
-    if (newServer !== server) setServer(newServer);
+    if (newServer !== server) {
+      setServer(newServer);
+    }
   }
+
+  const episodeNumber = episodeId.split("ep=").pop();
 
   return (
     <>
-      <div className="w-full bg-background aspect-video relative rounded-sm  max-w-screen-xl overflow-hidden">
-        <iframe
-          src={`https://${
-            server === "vidWish" ? "vidwish.live" : "megaplay.buzz"
-          }/stream/s-2/${episodeId.split("ep=").pop()}/${category}`}
-          width="100%"
-          height="100%"
-          allowFullScreen
-        ></iframe>
-      </div>
+      <VideoPlayer 
+        episodeId={episodeNumber}
+        category={category}
+        server={server}
+      />
       <div className="category flex flex-wrap flex-col sm:flex-row items-center justify-center  sm:justify-between px-2 md:px-20 gap-3 bg-lightbg py-2">
         <div className="servers flex gap-4">
           <button

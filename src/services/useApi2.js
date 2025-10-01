@@ -4,11 +4,35 @@ import config from '../config/config'
 
 const API_BASE_URL = config.serverUrl2
 const fetchData2 = async (url) => {
+  console.log("API_BASE_URL (useApi2):", API_BASE_URL);
+  console.log("Full URL (useApi2):", API_BASE_URL + url);
+  
   try {
-    const { data } = await axios.get(API_BASE_URL + url)
-    return data
+    const { data } = await axios.get(API_BASE_URL + url, {
+      timeout: 10000,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    return data;
   } catch (error) {
-    throw new Error(error)
+    console.error("API fetch error (useApi2):", error);
+    console.error("Error details:", {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data
+    });
+    
+    if (error.code === 'ECONNABORTED') {
+      throw new Error('Request timeout - Server is taking too long to respond');
+    } else if (error.response) {
+      throw new Error(`Server Error: ${error.response.status} - ${error.response.statusText}`);
+    } else if (error.request) {
+      throw new Error('Network Error - Unable to reach the server');
+    } else {
+      throw new Error(`Request Error: ${error.message}`);
+    }
   }
 }
 
