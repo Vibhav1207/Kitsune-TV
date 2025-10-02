@@ -3,7 +3,6 @@ import Home from "./pages/Home";
 import Root from "./pages/Root";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
-import StatusChecker from "./components/StatusChecker";
 import useSidebarStore from "./store/sidebarStore";
 import ListPage from "./pages/ListPage";
 import DetailPage from "./pages/DetailPage";
@@ -44,9 +43,6 @@ const App = () => {
           <Route path="/character/:id" element={<CharacterInfoPage />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
-        
-        {/* Status checker - only show in development */}
-        {import.meta.env.DEV && <StatusChecker />}
       </main>
     </>
   );

@@ -10,6 +10,14 @@ const axiosInstance = axios.create({
     'Accept': 'application/json',
   },
   withCredentials: false, // Don't send cookies to avoid CORS issues
+  // Add additional headers for better CORS support
+  ...(import.meta.env.PROD && {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    }
+  })
 });
 
 export const API_BASE_URL =
