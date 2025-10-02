@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Disallow admin or private pages if any
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://kitsunetv.xyz/sitemap.xml
+
+# Crawl delay (optional)
+Crawl-delay: 1

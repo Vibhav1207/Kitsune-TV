@@ -31,7 +31,10 @@ const SearchResult = () => {
     <div className="list-page pt-20">
       <Helmet>
         <title>search result of {keyword}</title>
-        <meta property="og:title" content="search - KitsuneTV" />
+        <title>Search Results - Find Your Favorite Anime | KitsuneTV</title>
+        <meta name="description" content="Search and discover thousands of anime series and movies on KitsuneTV. Find your favorite anime with our powerful search feature." />
+        <meta name="keywords" content="anime search, find anime, anime database, search anime online, KitsuneTV search" />
+        <meta property="og:title" content="Search Results - Find Your Favorite Anime | KitsuneTV" />
       </Helmet>
       {pages && !isLoading ? (
         <InfiniteScroll

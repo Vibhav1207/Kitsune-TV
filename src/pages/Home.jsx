@@ -37,15 +37,14 @@ const Home = () => {
   return (
     <div className="relative">
       <Helmet>
-        <title>
-          Watch Anime Online, Free Anime Streaming Online on KitsuneTV Anime
-          Website
-        </title>
-        <meta
-          name="description"
-          content=" KitsuneTV is a free no ads anime site to watch free anime. Online anime streaming at KitsuneTV with DUB, SUB in HD."
-        />
-        <meta property="og:title" content="home - KitsuneTV" />
+        <title>KitsuneTV | Watch Free Anime Online - Best Anime Streaming Site</title>
+        <meta name="title" content="KitsuneTV | Watch Free Anime Online - Best Anime Streaming Site" />
+        <meta name="description" content="Watch thousands of anime episodes for free on KitsuneTV. Stream latest anime series, movies, and OVAs with English subtitles and dubbing. No ads, HD quality streaming." />
+        <meta name="keywords" content="anime streaming, watch anime online, free anime, anime episodes, anime movies, english dubbed anime, english subtitled anime, HD anime, latest anime, popular anime, KitsuneTV, crunchyroll alternative, funimation alternative" />
+        <link rel="canonical" href="https://kitsunetv.xyz/" />
+        <meta property="og:title" content="KitsuneTV | Watch Free Anime Online - Best Anime Streaming Site" />
+        <meta property="og:description" content="Watch thousands of anime episodes for free on KitsuneTV. Stream latest anime series, movies, and OVAs with English subtitles and dubbing. No ads, HD quality streaming." />
+        <meta property="og:url" content="https://kitsunetv.xyz/" />
       </Helmet>
       {isLoading ? (
         <Loader className="h-[100dvh]" />

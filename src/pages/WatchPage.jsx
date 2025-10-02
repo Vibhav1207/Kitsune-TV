@@ -99,10 +99,12 @@ const WatchPage = () => {
     <div className="bg-backGround pt-14 max-w-screen-xl mx-auto py-2 md:px-2">
       <Helmet>
         <title>
-          Watch {id.split("-").slice(0, 2).join(" ")} Online, Free Anime
-          Streaming Online on KitsuneTV Anime Website
+          Watch {id.split("-").slice(0, 2).join(" ")} Online Free - KitsuneTV
         </title>
-        <meta property="og:title" content="watch - KitsuneTV" />
+        <meta name="description" content={`Watch ${id.split("-").slice(0, 2).join(" ")} episodes online for free on KitsuneTV. Stream with English subtitles and dubbing in HD quality.`} />
+        <meta name="keywords" content={`${id.split("-").slice(0, 2).join(" ")}, watch anime online, free anime streaming, anime episodes, KitsuneTV`} />
+        <meta property="og:title" content={`Watch ${id.split("-").slice(0, 2).join(" ")} Online Free - KitsuneTV`} />
+        <meta property="og:description" content={`Watch ${id.split("-").slice(0, 2).join(" ")} episodes online for free on KitsuneTV. Stream with English subtitles and dubbing in HD quality.`} />
       </Helmet>
       <div className="flex flex-col gap-2">
         <div className="path flex mb-2 mx-2 items-center gap-2 text-base ">
