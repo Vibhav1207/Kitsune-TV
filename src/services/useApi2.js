@@ -2,7 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import config from '../config/config'
 
-const API_BASE_URL = config.serverUrl2
+const API_BASE_URL = import.meta.env.PROD 
+  ? "https://api.allorigins.win/raw?url=https://eren-world.onrender.com/api/v1"
+  : config.serverUrl2;
 const fetchData2 = async (url) => {
   console.log("API_BASE_URL (useApi2):", API_BASE_URL);
   console.log("Full URL (useApi2):", API_BASE_URL + url);

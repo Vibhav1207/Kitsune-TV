@@ -2,6 +2,14 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import config from "../config/config";
 
+// Use a working CORS proxy for production
+export const API_BASE_URL = 
+  import.meta.env.PROD 
+    ? "https://api.allorigins.win/raw?url=https://eren-world.onrender.com/api/v1"
+    : (import.meta.env.VITE_APP_MODE && import.meta.env.VITE_APP_MODE === "development")
+      ? config.localUrl
+      : config.serverUrl;
+
 // Create axios instance with default configuration
 const axiosInstance = axios.create({
   timeout: 15000,
@@ -10,21 +18,7 @@ const axiosInstance = axios.create({
     'Accept': 'application/json',
   },
   withCredentials: false, // Don't send cookies to avoid CORS issues
-  // Add additional headers for better CORS support
-  ...(import.meta.env.PROD && {
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    }
-  })
 });
-
-export const API_BASE_URL =
-  import.meta.env.VITE_APP_MODE &&
-  import.meta.env.VITE_APP_MODE === "development"
-    ? config.localUrl
-    : config.serverUrl;
 
 const fetchData = async (url) => {
   console.log("API_BASE_URL:", API_BASE_URL);
