@@ -22,6 +22,7 @@ const axiosInstance = axios.create({
 
 const fetchData = async (url) => {
   console.log("API_BASE_URL:", API_BASE_URL);
+  console.log("Requested URL:", url);
   console.log("Full URL:", API_BASE_URL + url);
   
   if (!API_BASE_URL) {
@@ -31,6 +32,9 @@ const fetchData = async (url) => {
   try {
     // Remove /v1 from URL since our API function handles the full path
     const cleanUrl = url.startsWith('/v1') ? url.substring(3) : url;
+    console.log("Clean URL:", cleanUrl);
+    console.log("Final URL:", API_BASE_URL + cleanUrl);
+    
     const { data } = await axiosInstance.get(API_BASE_URL + cleanUrl);
     return data;
   } catch (error) {

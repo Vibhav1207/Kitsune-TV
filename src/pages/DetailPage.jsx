@@ -33,7 +33,12 @@ const DetailPage = () => {
   const { data: response, isError, error, isLoading } = useApi(`/anime/${id}`);
   const data = response?.data;
 
+  // Debug logging
+  console.log('DetailPage state:', { isLoading, isError, hasResponse: !!response, hasData: !!data });
+  if (error) console.log('DetailPage error:', error);
+
   if (isError) {
+    console.error('DetailPage error state:', error);
     return <PageNotFound />;
   }
 
