@@ -2,17 +2,17 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import config from "../config/config";
 
-// Use a working CORS proxy for production - force AllOrigins for any non-localhost environment
+// Use corsproxy.io which is more reliable than AllOrigins
 export const API_BASE_URL = 
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-    ? "https://api.allorigins.win/raw?url=https://eren-world.onrender.com/api/v1"
+    ? "https://corsproxy.io/?https://eren-world.onrender.com/api/v1"
     : (import.meta.env.VITE_APP_MODE && import.meta.env.VITE_APP_MODE === "development")
       ? config.localUrl
       : config.serverUrl;
 
 // Create axios instance with default configuration
 const axiosInstance = axios.create({
-  timeout: 15000,
+  timeout: 30000, // Increased to 30 seconds for slow proxy responses
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',

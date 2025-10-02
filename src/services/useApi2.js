@@ -3,7 +3,7 @@ import axios from 'axios'
 import config from '../config/config'
 
 const API_BASE_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-  ? "https://api.allorigins.win/raw?url=https://eren-world.onrender.com/api/v1"
+  ? "https://corsproxy.io/?https://eren-world.onrender.com/api/v1"
   : config.serverUrl2;
 const fetchData2 = async (url) => {
   console.log("API_BASE_URL (useApi2):", API_BASE_URL);
@@ -11,7 +11,7 @@ const fetchData2 = async (url) => {
   
   try {
     const { data } = await axios.get(API_BASE_URL + url, {
-      timeout: 10000,
+      timeout: 30000, // Increased timeout for proxy responses
       headers: {
         'Content-Type': 'application/json',
       }
