@@ -1,4 +1,9 @@
 export default async function handler(req, res) {
+  console.log('=== API Proxy Request ===');
+  console.log('Method:', req.method);
+  console.log('URL:', req.url);
+  console.log('Query:', req.query);
+  
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -18,7 +23,7 @@ export default async function handler(req, res) {
     // Construct the target URL
     const targetUrl = `https://eren-world.onrender.com/api/v1/${pathString}`;
     
-    console.log('Proxying request to:', targetUrl);
+    console.log('Target URL:', targetUrl);
 
     // Make the request to the anime API
     const response = await fetch(targetUrl, {
@@ -32,21 +37,30 @@ export default async function handler(req, res) {
       },
     });
 
+    console.log('Response status:', response.status);
+    console.log('Response ok:', response.ok);
+
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
+      throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
     }
 
     const data = await response.json();
+    console.log('Success! Data keys:', Object.keys(data));
     
     // Return the data with proper headers
     res.status(200).json(data);
     
   } catch (error) {
-    console.error('Proxy error:', error);
+    console.error('=== API Proxy Error ===');
+    console.error('Error:', error);
+    console.error('Error message:', error.message);
     res.status(500).json({ 
       error: 'Failed to fetch anime data',
       message: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      requestedPath: req.query.path
     });
   }
 }
