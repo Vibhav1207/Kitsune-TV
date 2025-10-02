@@ -3,7 +3,7 @@ import axios from 'axios'
 import config from '../config/config'
 
 const API_BASE_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-  ? "https://corsproxy.io/?https://eren-world.onrender.com/api/v1"
+  ? "/api" // Use our own Vercel function
   : config.serverUrl2;
 const fetchData2 = async (url) => {
   console.log("API_BASE_URL (useApi2):", API_BASE_URL);
