@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import config from '../config/config'
 
-const API_BASE_URL = import.meta.env.PROD 
+const API_BASE_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
   ? "https://api.allorigins.win/raw?url=https://eren-world.onrender.com/api/v1"
   : config.serverUrl2;
 const fetchData2 = async (url) => {

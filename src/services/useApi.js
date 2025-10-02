@@ -2,9 +2,9 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import config from "../config/config";
 
-// Use a working CORS proxy for production
+// Use a working CORS proxy for production - force AllOrigins for any non-localhost environment
 export const API_BASE_URL = 
-  import.meta.env.PROD 
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
     ? "https://api.allorigins.win/raw?url=https://eren-world.onrender.com/api/v1"
     : (import.meta.env.VITE_APP_MODE && import.meta.env.VITE_APP_MODE === "development")
       ? config.localUrl
