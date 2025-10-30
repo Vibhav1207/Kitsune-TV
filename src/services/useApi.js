@@ -29,24 +29,61 @@ const fetchData = async (url) => {
     throw new Error("API_BASE_URL is not configured. Please check your environment variables.");
   }
   
+  // Remove /v1 from URL since our API function handles the full path
+  const cleanUrl = url.startsWith('/v1') ? url.substring(3) : url;
+  console.log("Clean URL:", cleanUrl);
+  console.log("Final URL:", API_BASE_URL + cleanUrl);
+
+  const primaryUrl = API_BASE_URL + cleanUrl;
+
   try {
-    // Remove /v1 from URL since our API function handles the full path
-    const cleanUrl = url.startsWith('/v1') ? url.substring(3) : url;
-    console.log("Clean URL:", cleanUrl);
-    console.log("Final URL:", API_BASE_URL + cleanUrl);
-    
-    const { data } = await axiosInstance.get(API_BASE_URL + cleanUrl);
+    const { data } = await axiosInstance.get(primaryUrl);
+    // Validate shape; upstream responses usually have a "data" key.
+    if (typeof data === 'string' || !data || (typeof data === 'object' && !('data' in data))) {
+      console.warn('Primary response shape unexpected, attempting fallback', { primaryUrl, dataType: typeof data });
+      throw new Error('Unexpected response shape');
+    }
     return data;
   } catch (error) {
-    console.error("API fetch error:", error);
-    console.error("Error details:", {
+    console.error("Primary API fetch error:", error?.message || error);
+    console.error("Primary error details:", {
       message: error.message,
       status: error.response?.status,
       statusText: error.response?.statusText,
       data: error.response?.data,
-      code: error.code
+      code: error.code,
+      primaryUrl,
     });
-    
+
+    // Fallback logic: try alternate endpoints that exist in the repo
+    try {
+      // If the endpoint is /anime/{id}, try /anime?id={id}
+      if (cleanUrl.startsWith('/anime/')) {
+        const id = cleanUrl.split('/').pop();
+        const fallbackUrl = `${API_BASE_URL}/anime?id=${encodeURIComponent(id)}`;
+        console.log('Fallback URL (anime):', fallbackUrl);
+        const { data: fb } = await axiosInstance.get(fallbackUrl);
+        if (typeof fb === 'string' || !fb || (typeof fb === 'object' && !('data' in fb))) {
+          throw new Error('Fallback anime response not JSON');
+        }
+        return fb;
+      }
+      // If the endpoint is /episodes/{id}, try /episodes?id={id}
+      if (cleanUrl.startsWith('/episodes/')) {
+        const id = cleanUrl.split('/').pop();
+        const fallbackUrl = `${API_BASE_URL}/episodes?id=${encodeURIComponent(id)}`;
+        console.log('Fallback URL (episodes):', fallbackUrl);
+        const { data: fb } = await axiosInstance.get(fallbackUrl);
+        if (typeof fb === 'string' || !fb || (typeof fb === 'object' && !('data' in fb))) {
+          throw new Error('Fallback episodes response not JSON');
+        }
+        return fb;
+      }
+    } catch (fbErr) {
+      console.error('Fallback request failed:', fbErr?.message || fbErr);
+      // Fall through to final error mapping
+    }
+
     if (error.code === 'ECONNABORTED') {
       throw new Error('Request timeout - Server is taking too long to respond');
     } else if (error.response) {
