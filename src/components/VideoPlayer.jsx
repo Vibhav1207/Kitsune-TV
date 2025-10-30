@@ -11,12 +11,21 @@ const VideoPlayer = ({ episodeId, category, server }) => {
   const servers = {
     vidWish: "vidwish.live",
     megaPlay: "megaplay.buzz",
-    // Add more backup servers if available
     backup1: "vidwish.live",
-    backup2: "megaplay.buzz"
+    backup2: "megaplay.buzz",
   };
 
-  const videoUrl = `https://${servers[server] || servers.vidWish}/stream/s-2/${episodeId}/${category}`;
+  // Different path variants seen across hosts; try sequentially
+  const pathVariants = [
+    (host) => `https://${host}/stream/s-2/${episodeId}/${category}`,
+    (host) => `https://${host}/stream/s-4/${episodeId}/${category}`,
+    (host) => `https://${host}/stream/s-1/${episodeId}/${category}`,
+    (host) => `https://${host}/stream/s-3/${episodeId}/${category}`,
+  ];
+
+  const [variantIndex, setVariantIndex] = useState(0);
+  const host = servers[server] || servers.vidWish;
+  const videoUrl = pathVariants[variantIndex](host);
 
   const handleIframeLoad = () => {
     setIsLoading(false);
@@ -26,15 +35,27 @@ const VideoPlayer = ({ episodeId, category, server }) => {
 
   const handleIframeError = () => {
     setIsLoading(false);
-    if (retryCount < maxRetries) {
-      setTimeout(() => {
-        setRetryCount(prev => prev + 1);
-        setIsLoading(true);
-        setVideoError(false);
-      }, 2000);
-    } else {
-      setVideoError(true);
-    }
+    // Advance to next path variant first, then fall back to retries
+    setVariantIndex((idx) => {
+      if (idx < pathVariants.length - 1) {
+        setTimeout(() => {
+          setIsLoading(true);
+          setVideoError(false);
+        }, 200);
+        return idx + 1;
+      }
+      // All variants tried, use timed retries
+      if (retryCount < maxRetries) {
+        setTimeout(() => {
+          setRetryCount((prev) => prev + 1);
+          setIsLoading(true);
+          setVideoError(false);
+        }, 2000);
+      } else {
+        setVideoError(true);
+      }
+      return idx;
+    });
   };
 
   // Reset error state when props change
@@ -42,6 +63,7 @@ const VideoPlayer = ({ episodeId, category, server }) => {
     setVideoError(false);
     setIsLoading(true);
     setRetryCount(0);
+    setVariantIndex(0);
   }, [episodeId, category, server]);
 
   if (videoError) {
@@ -80,6 +102,16 @@ const VideoPlayer = ({ episodeId, category, server }) => {
 
   return (
     <div className="w-full aspect-video relative rounded-sm overflow-hidden bg-gray-900">
+      {/* Manual route switch control */}
+      <div className="absolute top-2 right-2 z-10">
+        <button
+          onClick={() => setVariantIndex((idx) => (idx + 1) % pathVariants.length)}
+          className="px-2 py-1 text-xs bg-primary text-black rounded hover:opacity-80"
+          title="Switch stream route"
+        >
+          Switch Route
+        </button>
+      </div>
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
           <div className="flex flex-col items-center">

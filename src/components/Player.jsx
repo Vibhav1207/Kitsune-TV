@@ -14,7 +14,7 @@ const Player = ({
   hasPrevEp,
 }) => {
   const [category, setCategory] = useState("sub");
-  const [server, setServer] = useState("vidWish");
+  const [server, setServer] = useState("megaPlay");
 
   const changeCategory = (newType) => {
     if (newType !== category) {

@@ -30,13 +30,13 @@ const Episodes = ({ episode, currentEp, layout }) => {
               >
                 {episode.episodeNumber}
               </button>
-              <li
+              <div
                 className={`flex-1 ${
                   isCurrent ? "text-black" : "text-white"
                 } text-sm truncate`}
               >
                 {episode.title}
-              </li>
+              </div>
               {episode.isFiller && <span title="Filler">👻</span>}
             </div>
           </Link>
