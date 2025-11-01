@@ -13,6 +13,7 @@ import PageNotFound from "./pages/PageNotFound";
 import PeopleInfoPage from "./pages/PeopleInfoPage";
 import CharacterInfoPage from "./pages/CharacterInfoPage";
 import CharactersPage from "./pages/CharactersPage";
+import HalloweenEvent from "./pages/HalloweenEvent";
 
 const App = () => {
   const isSidebarOpen = useSidebarStore((state) => state.isSidebarOpen);
@@ -34,6 +35,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Root />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/halloweenevent" element={<HalloweenEvent />} />
           <Route path="/anime/:id" element={<DetailPage />} />
           <Route path="/animes/:category/:query?" element={<ListPage />} />
           <Route path="/search" element={<SearchResult />} />

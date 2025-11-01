@@ -5,10 +5,8 @@ import config from "../config/config";
 // Use our own Vercel API endpoint for production
 export const API_BASE_URL = 
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
-    ? "/api" // Use our own Vercel function
-    : (import.meta.env.VITE_APP_MODE && import.meta.env.VITE_APP_MODE === "development")
-      ? config.localUrl
-      : config.serverUrl;
+    ? "/api" // Use our own Vercel function in production/preview
+    : (import.meta.env.DEV ? config.localUrl : config.serverUrl);
 
 // Create axios instance with default configuration
 const axiosInstance = axios.create({

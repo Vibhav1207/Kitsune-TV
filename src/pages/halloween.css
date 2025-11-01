@@ -1,0 +1,140 @@
+/* Halloween Theme Styles */
+
+.halloween-bg {
+  background: radial-gradient(1200px 600px at 50% -200px, rgba(255,128,0,0.07), transparent 60%),
+              linear-gradient(180deg, #0b0b0f 0%, #120a12 40%, #1a0d18 100%);
+}
+
+/* Fog overlay */
+.halloween-fog::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05), transparent 40%),
+              radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05), transparent 40%);
+  animation: fogMove 12s linear infinite;
+}
+
+@keyframes fogMove {
+  0% { transform: translateX(0); opacity: 0.7; }
+  50% { transform: translateX(10px); opacity: 0.9; }
+  100% { transform: translateX(0); opacity: 0.7; }
+}
+
+/* Floating ambient elements */
+.floating-ghost, .floating-bat {
+  position: absolute;
+  width: 80px; height: 80px;
+  opacity: 0.6;
+}
+.ghost-1 { top: 12%; left: 5%; animation: floatY 6s ease-in-out infinite; }
+.ghost-2 { top: 30%; right: 6%; animation: floatY 7s ease-in-out infinite; }
+.bat-1 { top: 18%; left: 65%; animation: batFly 10s linear infinite; }
+.bat-2 { top: 70%; left: 20%; animation: batFly 12s linear infinite reverse; }
+.bat-3 { top: 50%; right: 10%; animation: batFly 14s linear infinite; }
+
+@keyframes floatY {
+  0% { transform: translateY(0) }
+  50% { transform: translateY(10px) }
+  100% { transform: translateY(0) }
+}
+@keyframes batFly {
+  0% { transform: translateX(0) scale(1); opacity: 0.6; }
+  50% { transform: translateX(20px) scale(1.1); opacity: 0.8; }
+  100% { transform: translateX(0) scale(1); opacity: 0.6; }
+}
+
+/* Navbar */
+.halloween-nav {
+  border-bottom: 1px solid rgba(255, 128, 0, 0.15);
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(2px);
+}
+.halloween-link {
+  color: #ffae4a;
+  text-shadow: 0 0 6px rgba(255, 128, 0, 0.6), 0 0 12px rgba(255, 128, 0, 0.3);
+  transition: transform 200ms ease, box-shadow 200ms ease, color 200ms ease;
+}
+.halloween-link:hover {
+  color: #ffd9a3;
+  box-shadow: 0 0 12px rgba(255, 128, 0, 0.65);
+  transform: translateY(-1px);
+}
+
+/* Title */
+.halloween-title {
+  color: #ff9f3d;
+  text-shadow:
+    0 0 10px rgba(255, 137, 0, 0.7),
+    0 0 20px rgba(163, 76, 239, 0.5),
+    0 0 30px rgba(255, 137, 0, 0.3);
+  letter-spacing: 0.5px;
+}
+
+/* Logo ring */
+.halloween-logo-ring {
+  width: 120px; height: 120px; border-radius: 9999px;
+  background: radial-gradient(circle at 50% 40%, rgba(255,128,0,0.5), rgba(255,128,0,0.15) 40%, transparent 65%);
+  box-shadow: 0 0 20px rgba(255,128,0,0.35), inset 0 0 20px rgba(163,76,239,0.25);
+  display: flex; align-items: center; justify-content: center;
+  animation: ringPulse 4s ease-in-out infinite;
+}
+.halloween-logo { width: 84px; height: 84px; display: flex; align-items: center; justify-content: center; }
+
+@keyframes ringPulse {
+  0% { box-shadow: 0 0 18px rgba(255,128,0,0.35), inset 0 0 18px rgba(163,76,239,0.2); }
+  50% { box-shadow: 0 0 28px rgba(255,128,0,0.6), inset 0 0 26px rgba(163,76,239,0.35); }
+  100% { box-shadow: 0 0 18px rgba(255,128,0,0.35), inset 0 0 18px rgba(163,76,239,0.2); }
+}
+
+/* Cards */
+.halloween-card {
+  box-shadow: 0 0 0 1px rgba(163, 76, 239, 0.15);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.halloween-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(163, 76, 239, 0.35);
+}
+
+.halloween-btn {
+  background: linear-gradient(180deg, #ff9f3d 0%, #ff6a00 100%);
+  color: #111;
+  box-shadow: 0 0 12px rgba(255, 128, 0, 0.6);
+  transition: filter 150ms ease, transform 150ms ease;
+}
+.halloween-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.section-title {
+  color: #ffd9a3;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 128, 0, 0.6), 0 0 18px rgba(148, 0, 211, 0.4);
+}
+
+.halloween-rarity-icon {
+  background: conic-gradient(from 0deg, #ff6a00, #a34a00, #ff9f3d, #ff6a00);
+  border-radius: 9999px;
+  box-shadow: 0 0 10px rgba(255, 128, 0, 0.5);
+}
+
+/* Modal */
+.halloween-modal {
+  box-shadow: 0 0 24px rgba(255, 128, 0, 0.3), 0 0 36px rgba(148, 0, 211, 0.25);
+  transition: transform 200ms ease;
+}
+.halloween-modal:focus, .halloween-modal:hover { transform: translateY(-1px); }
+
+/* Simple spider web corners */
+.halloween-bg::after {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(20px 20px at 10px 10px, rgba(255,255,255,0.08), transparent 35%),
+    radial-gradient(30px 30px at calc(100% - 15px) 15px, rgba(255,255,255,0.07), transparent 40%),
+    radial-gradient(25px 25px at 15px calc(100% - 15px), rgba(255,255,255,0.06), transparent 40%),
+    radial-gradient(20px 20px at calc(100% - 15px) calc(100% - 15px), rgba(255,255,255,0.06), transparent 40%);
+}
