@@ -132,6 +132,7 @@ const VideoPlayer = ({ episodeId, category, server }) => {
         width="100%"
         height="100%"
         allowFullScreen
+        sandbox="allow-scripts allow-same-origin"
         onLoad={handleIframeLoad}
         onError={handleIframeError}
         title={`Episode ${episodeId} - ${category}`}

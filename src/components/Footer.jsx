@@ -29,14 +29,12 @@ const Footer = () => {
         <div className="btns flex justify-center my-2 items-center gap-2">
           <a
             href="https://github.com/yahyaMomin"
-            target="_blank"
             className="text-gray-500 hover:text-white text-2xl"
           >
             <FaGithub />
           </a>
           {/* <a
             href="https://t.me/Mst83din"
-            target="_blank"
             className="text-gray-500 hover:text-blue-300 text-2xl"
           >
             <FaTelegram />

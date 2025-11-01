@@ -50,8 +50,6 @@ const AlternativePlayer = ({ episodeId, category, server }) => {
                 <a
                   key={index}
                   href={source.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="block p-2 bg-btnbg rounded text-center text-sm hover:bg-primary hover:text-black transition-colors"
                 >
                   {source.name}
