@@ -261,7 +261,7 @@ const HalloweenEvent = () => {
   const [selected, setSelected] = useState(null);
   const audioRef = useRef(null);
   const [soundOn, setSoundOn] = useState(true); // default playing
-  const [countdown, setCountdown] = useState({ days: 15, hours: 0, minutes: 0, seconds: 0 });
+  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [endTs, setEndTs] = useState(null);
 
   useEffect(() => {
@@ -280,11 +280,9 @@ const HalloweenEvent = () => {
     start();
   }, []);
 
-  // Initialize 15-day countdown and update every second
+  // Fixed event end time: Nov 15, 2025 at 12:00 local time
   useEffect(() => {
-    let stored = localStorage.getItem("halloweenEventEndTs");
-    let end = stored ? parseInt(stored, 10) : Date.now() + 15 * 24 * 60 * 60 * 1000;
-    if (!stored) localStorage.setItem("halloweenEventEndTs", String(end));
+    const end = new Date(2025, 10, 15, 12, 0, 0).getTime(); // months are 0-indexed
     setEndTs(end);
 
     const tick = () => {
