@@ -58,7 +58,7 @@ const VideoPlayer = ({ episodeId, category, server }) => {
     });
   };
 
-  // Reset error state when props change
+  // Reset state when props change
   useEffect(() => {
     setVideoError(false);
     setIsLoading(true);

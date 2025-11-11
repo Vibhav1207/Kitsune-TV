@@ -12,6 +12,7 @@ import { Helmet } from "react-helmet";
 import { useState } from "react";
 import { FaWindowClose } from "react-icons/fa";
 import VoiceActorsLayout from "../layouts/VoiceActorsLayout";
+import SEO from "../components/SEO";
 
 const DetailPage = () => {
   const { id } = useParams();
@@ -62,10 +63,19 @@ const DetailPage = () => {
         </div>
       )}
 
-      <Helmet>
-        <title>{titleId}</title>
-        <meta property="og:title" content="detail - KitsuneTV" />
-      </Helmet>
+      {data && (
+        (() => {
+          const synopsis = (data.synopsis || "").trim();
+          const shortDesc = synopsis.length > 180 ? `${synopsis.slice(0, 177)}...` : synopsis || `Details and episodes for ${data.title} on KitsuneTV.`;
+          return (
+            <SEO
+              title={data.title}
+              description={shortDesc}
+              image={data.poster}
+            />
+          );
+        })()
+      )}
       {data && !isLoading ? (
         <div className={`DetailPage relative pt-10 ${bigPoster && "blur-sm"} `}>
           <InfoLayout showBigPoster={showBigPoster} data={data} />

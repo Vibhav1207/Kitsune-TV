@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import logoGif from "../assets/logo.gif";
 import "./halloween.css";
 import music from "../assets/musicv.mp3";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const rarityColors = {
   Legendary: "text-yellow-300",
@@ -72,7 +74,14 @@ const rarityIcon = (rarity) => {
   return (
     <span className="inline-flex items-center gap-2">
       {url ? (
-        <img src={url} alt={`${rarity} emoji`} className="w-5 h-5 rounded" />
+        <LazyLoadImage
+          src={url}
+          alt={`${rarity} emoji`}
+          className="w-5 h-5 rounded"
+          effect="blur"
+          width={20}
+          height={20}
+        />
       ) : (
         <span className="inline-block w-5 h-5 halloween-rarity-icon" />
       )}
@@ -223,14 +232,14 @@ const Card = ({ item, onView }) => {
     <div className="halloween-card bg-[#121018] border border-purple-500/30 rounded-xl overflow-hidden">
       <div className="bg-[#0c0a12] p-2 flex items-center justify-center">
         {item.img ? (
-          <img
+          <LazyLoadImage
             src={item.img}
             alt={item.name}
-            loading="eager"
-            fetchpriority="high"
+            loading="lazy"
             decoding="async"
             crossOrigin="anonymous"
             className="w-full h-40 md:h-48 object-contain"
+            effect="blur"
           />
         ) : (
           <CharacterImage type={item.imgType} />
@@ -323,6 +332,7 @@ const HalloweenEvent = () => {
     <title>ReeF Bot Halloween Event 2025</title>
     <meta property="og:title" content="ReeF Bot Halloween Event 2025" />
     <meta property="og:description" content="Join the spookiest Discord event of the year! Collect pumpkins, open crates, and summon rare Halloween characters before the spirits fade!" />
+    <link rel="preload" as="image" href={logoGif} />
     <link rel="preconnect" href="https://raw.githubusercontent.com" />
     <link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
     <link rel="preconnect" href="https://cdn.discordapp.com" />
@@ -394,10 +404,14 @@ const HalloweenEvent = () => {
         <div className="mt-4 bg-[#121018] border border-orange-500/30 rounded-xl p-4">
           <h3 className="text-white font-semibold text-lg mb-2">Obtainable Items</h3>
           <div className="flex items-start gap-4">
-            <img
+            <LazyLoadImage
               src="https://cdn.discordapp.com/emojis/1300748493970870323.gif?size=64&quality=lossless"
               alt="Discord pumpkin emoji"
               className="w-20 h-20 rounded-md shadow-md"
+              loading="lazy"
+              effect="blur"
+              width={80}
+              height={80}
             />
             <div>
               <h4 className="text-orange-300 font-bold">Pumpkin</h4>
@@ -479,8 +493,8 @@ const HalloweenEvent = () => {
           </div>
         )}
       </Modal>
-    </div>
-  );
+  </div>
+);
 };
 
 export default HalloweenEvent;

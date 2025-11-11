@@ -7,7 +7,9 @@ import { useApi } from "../services/useApi";
 import PageNotFound from "./PageNotFound";
 import { MdTableRows } from "react-icons/md";
 import { HiMiniViewColumns } from "react-icons/hi2";
-import { Helmet } from "react-helmet";
+import SEO from "../components/SEO";
+import { useRef, useEffect as useEffect2 } from "react";
+import { recordView, recordWatchTime } from "../utils/metrics";
 
 const WatchPage = () => {
   const { id } = useParams();
@@ -35,6 +37,30 @@ const WatchPage = () => {
     }
   }, [ep, episodes, setSearchParams]);
 
+  // Derive current and safe episode EARLY (before any returns) for hook stability
+  const currentEp =
+    episodes &&
+    ep !== null &&
+    episodes.find((e) => e.id.split("ep=").pop() === ep);
+
+  const safeCurrentEp = currentEp || (episodes && episodes[0]);
+
+  // Metrics: record views and watch time per episode (hooks must be top-level)
+  const sessionStartRef = useRef(null);
+  useEffect2(() => {
+    if (!safeCurrentEp) return;
+    sessionStartRef.current = Date.now();
+    const titleName = id.split("-").slice(0, 2).join(" ");
+    recordView({ animeId: id, title: titleName, episodeNumber: safeCurrentEp.episodeNumber });
+    return () => {
+      if (sessionStartRef.current) {
+        const seconds = (Date.now() - sessionStartRef.current) / 1000;
+        recordWatchTime({ animeId: id, title: titleName, episodeNumber: safeCurrentEp.episodeNumber, seconds });
+        sessionStartRef.current = null;
+      }
+    };
+  }, [safeCurrentEp?.id, id]);
+
   if (isError) {
     console.error("Error fetching episodes:", error);
     return (
@@ -56,14 +82,6 @@ const WatchPage = () => {
   if (isLoading || !episodes) {
     return <Loader className="h-screen" />;
   }
-
-  const currentEp =
-    episodes &&
-    ep !== null &&
-    episodes.find((e) => e.id.split("ep=").pop() === ep);
-
-  // If we can't find the current episode, default to the first one
-  const safeCurrentEp = currentEp || (episodes && episodes[0]);
 
   if (!safeCurrentEp) {
     return (
@@ -97,15 +115,10 @@ const WatchPage = () => {
   return (
     /* WatchPage.js */
     <div className="bg-backGround pt-14 max-w-screen-xl mx-auto py-2 md:px-2">
-      <Helmet>
-        <title>
-          Watch {id.split("-").slice(0, 2).join(" ")} Online Free - KitsuneTV
-        </title>
-        <meta name="description" content={`Watch ${id.split("-").slice(0, 2).join(" ")} episodes online for free on KitsuneTV. Stream with English subtitles and dubbing in HD quality.`} />
-        <meta name="keywords" content={`${id.split("-").slice(0, 2).join(" ")}, watch anime online, free anime streaming, anime episodes, KitsuneTV`} />
-        <meta property="og:title" content={`Watch ${id.split("-").slice(0, 2).join(" ")} Online Free - KitsuneTV`} />
-        <meta property="og:description" content={`Watch ${id.split("-").slice(0, 2).join(" ")} episodes online for free on KitsuneTV. Stream with English subtitles and dubbing in HD quality.`} />
-      </Helmet>
+      <SEO
+        title={`Watch ${id.split("-").slice(0, 2).join(" ")} Episode ${safeCurrentEp.episodeNumber} Online`}
+        description={`Stream episode ${safeCurrentEp.episodeNumber} of ${id.split("-").slice(0, 2).join(" ")} for free in HD with English sub & dub on KitsuneTV.`}
+      />
       <div className="flex flex-col gap-2">
         <div className="path flex mb-2 mx-2 items-center gap-2 text-base ">
           <Link className="" to="/home">

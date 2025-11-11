@@ -14,6 +14,8 @@ import PeopleInfoPage from "./pages/PeopleInfoPage";
 import CharacterInfoPage from "./pages/CharacterInfoPage";
 import CharactersPage from "./pages/CharactersPage";
 import HalloweenEvent from "./pages/HalloweenEvent";
+import SEO from "./components/SEO";
+import InfoPage from "./pages/InfoPage";
 
 const App = () => {
   const isSidebarOpen = useSidebarStore((state) => state.isSidebarOpen);
@@ -23,6 +25,7 @@ const App = () => {
 
   return (
     <>
+      <SEO />
       {!path && <Sidebar />}
 
       <main className={`${isSidebarOpen ? "bg-active" : ""} opacityWrapper`}>
@@ -43,6 +46,7 @@ const App = () => {
           <Route path="/characters/:id" element={<CharactersPage />} />
           <Route path="/people/:id" element={<PeopleInfoPage />} />
           <Route path="/character/:id" element={<CharacterInfoPage />} />
+          <Route path="/info" element={<InfoPage />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </main>

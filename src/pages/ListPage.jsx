@@ -10,6 +10,7 @@ import AZ from "../layouts/AZ";
 import React from "react";
 import Footer from "../components/Footer";
 import { Helmet } from "react-helmet";
+import SEO from "../components/SEO";
 
 const ListPage = () => {
   const validateQueries = [
@@ -50,10 +51,31 @@ const ListPage = () => {
 
   return (
     <div className="list-page pt-14">
-      <Helmet>
-        <title>{category} animes</title>
-        <meta property="og:title" content="explore - KitsuneTV" />
-      </Helmet>
+      {(() => {
+        const labels = {
+          "top-airing": "Top Airing",
+          "most-popular": "Most Popular",
+          "most-favorite": "Most Favorite",
+          "completed": "Completed",
+          "recently-added": "Recently Added",
+          "recently-updated": "Recently Updated",
+          "top-upcoming": "Top Upcoming",
+          "subbed-anime": "Subbed Anime",
+          "dubbed-anime": "Dubbed Anime",
+          movie: "Anime Movies",
+          tv: "Anime TV Series",
+          ova: "OVA",
+          ona: "ONA",
+          special: "Special",
+          "az-list": "A-Z List",
+          genre: query ? `Genre: ${query}` : "Genre",
+          producer: query ? `Producer: ${query}` : "Producer",
+        };
+        const label = labels[category] || category;
+        const title = query ? `${label} Anime` : `${label} Anime`;
+        const description = `Browse ${label.toLowerCase()} anime on KitsuneTV. Watch free in HD with English sub & dub.`;
+        return <SEO title={title} description={description} />;
+      })()}
       {category === "az-list" && <AZ selected={query} />}
       {pages && !isLoading ? (
         <InfiniteScroll

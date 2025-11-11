@@ -8,12 +8,14 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Image from "../components/Image";
 import Footer from "../components/Footer";
 import { Helmet } from "react-helmet";
+import SEO from "../components/SEO";
 
 const SearchResult = () => {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("keyword");
+  const safeKeyword = (keyword || "").trim();
   const { data, isLoading, isError, hasNextPage, fetchNextPage } =
-    useInfiniteApi(`/search?keyword=${keyword}&page=`);
+    useInfiniteApi(safeKeyword.length > 1 ? `/search?keyword=${safeKeyword}&page=` : "/search?keyword=naruto&page=");
 
   if (isError) {
     return (
@@ -25,20 +27,20 @@ const SearchResult = () => {
     );
   }
   const pages = data?.pages;
-  console.log(data?.pages.length);
+  const itemsCount = Array.isArray(pages)
+    ? pages.reduce((sum, page) => sum + (Array.isArray(page?.data?.response) ? page.data.response.length : 0), 0)
+    : 0;
 
   return (
     <div className="list-page pt-20">
-      <Helmet>
-        <title>search result of {keyword}</title>
-        <title>Search Results - Find Your Favorite Anime | KitsuneTV</title>
-        <meta name="description" content="Search and discover thousands of anime series and movies on KitsuneTV. Find your favorite anime with our powerful search feature." />
-        <meta name="keywords" content="anime search, find anime, anime database, search anime online, KitsuneTV search" />
-        <meta property="og:title" content="Search Results - Find Your Favorite Anime | KitsuneTV" />
-      </Helmet>
+      <SEO
+        title={`Search: ${safeKeyword || "naruto"}`}
+        description={`Search results for "${safeKeyword || "naruto"}" on KitsuneTV. Discover anime series and movies.`}
+        noIndex={true}
+      />
       {pages && !isLoading ? (
         <InfiniteScroll
-          dataLength={data?.pages.flat().length || 0}
+          dataLength={itemsCount}
           next={fetchNextPage}
           hasMore={hasNextPage}
           loader={<Loader className="h-fit" />}
@@ -58,7 +60,13 @@ const SearchResult = () => {
           </div>
         </InfiniteScroll>
       ) : (
-        <Loader className="h-[100dvh]" />
+        <div className="h-[100dvh] flex items-center justify-center">
+          {safeKeyword.length <= 1 ? (
+            <h2 className="text-center text-gray-300">Enter at least 2 characters to search.</h2>
+          ) : (
+            <Loader className="h-fit" />
+          )}
+        </div>
       )}
     </div>
   );
